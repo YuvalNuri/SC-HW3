@@ -19,21 +19,26 @@ function ErrorCallBack(err) {
     console.log(err);
 }
 
-const apiMovies = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies";
-const apiRating = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies/rating/";
-const apiDuration = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies/GetByDuration?duration=";
-const apiCast = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Casts";
+const apiMovies = "https://localhost:7208/api/Movies";
+const apiRating = "https://localhost:7208/api/Movies/rating/";
+const apiDuration = "https://localhost:7208/api/Movies/GetByDuration?duration=";
+const apiAddWish="https://localhost:7208/api/Movies/AddToWishList";
+const apiGetWish="https://localhost:7208/api/Movies/GetWishList?id=";
+const apiCast = "https://localhost:7208/api/Casts";
+const apiUser = "https://localhost:7208/api/Users";
+const apiLogName="https://localhost:7208/api/Users/LogInName";
+const apiLogEmail="https://localhost:7208/api/Users/LogInEmail";
 
 function init() {
-    allMoviesStr = AllMovies();
-    document.getElementById("AllMovies").innerHTML = allMoviesStr;
+    ajaxCall('Get',apiMovies,null,AllMovies,ErrorCallBack);
     ajaxCall('GET', apiCast, null, SuccessCBGetAllCast, ErrorCallBack);
     document.getElementById("bdC").max = new Date().toISOString().split('T')[0];
     $("#filter").hide();
     $("#castRow").hide();
 }
 
-function AllMovies() {
+function AllMovies(data) {
+    movies = data;
     let strMovies = "";
     for (let i = 0; i < movies.length; i++) {
         console.log(movies[i].title);
@@ -55,12 +60,12 @@ function AllMovies() {
                         ${movies[i].description}
                     </div>
                     <div class="col-12 wishD">
-                        <button class="btnATWish" onclick="AddToWishList(${i})">Add to Wish List</button>
+                        <button class="btnATWish" onclick="AddToWishList(${movies[i].id})">Add to Wish List</button>
                     </div>
                 </div>
             </div>`;
     }
-    return strMovies;
+    document.getElementById("AllMovies").innerHTML = strMovies;
 }
 
 function SuccessCBGetAllCast(data) {
@@ -81,9 +86,10 @@ function SuccessCBGetAllCast(data) {
     document.getElementById("CMrow").innerHTML = allCasrStr;
 }
 
-function AddToWishList(i) {
-    ajaxCall('POST', apiMovies, JSON.stringify(movies[i]), SuccessCallBack, ErrorCallBack);
-    console.log(movies[i]);
+function AddToWishList(id) {
+    id2=`[2,${id}]`;
+    console.log(id2);
+    ajaxCall('POST', apiAddWish, id2, SuccessCallBack, ErrorCallBack); //change the "2" to the user id
 }
 
 function ShowWishList() {
@@ -93,13 +99,13 @@ function ShowWishList() {
     $("#filter").show();
     $("#filterRating").val('');
     $("#filterDuration").val('');
-    ajaxCall('GET', apiMovies, null, SuccessCBWish, ErrorCallBack);
+    ajaxCall('GET', apiGetWish+"2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
 }
 
 function SuccessCBWish(data) {
     console.log(data);
     for (let i = 0; i < data.length; i++) {
-        $(`#m${data[i].id}`).show();
+        $(`#m${data[i]}`).show();
     }
 }
 
@@ -114,7 +120,7 @@ function FilterByDur() {
     duration = $("#filterDuration").val();
     $("#filterRating").val('');
     $(".card").hide();
-    ajaxCall('GET', apiDuration + duration, null, SuccessCBWish, ErrorCallBack);
+    ajaxCall('GET', apiDuration + duration+"&u=2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
 
 }
 
@@ -122,7 +128,7 @@ function FilterByRate() {
     rating = $("#filterRating").val();
     $("#filterDuration").val('');
     $(".card").hide();
-    ajaxCall('GET', apiRating + rating, null, SuccessCBWish, ErrorCallBack);
+    ajaxCall('GET', apiRating + rating+"/user/2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
 
 }
 
@@ -159,11 +165,11 @@ function SuccessCBCast(data) {
     }
     else {
         $("#castForm")[0].reset();
-        ajaxCall('GET', apiCast, null, SuccessCBGetCast, ErrorCallBack);
+        ajaxCall('GET', apiCast, null, SuccessCBGetAllCast, ErrorCallBack);
     }
 }
 
-function SuccessCBGetCast(data) {
+/*function SuccessCBGetCast(data) {
     console.log(data);
     castMember = data[data.length - 1];
     document.getElementById("CMrow").innerHTML +=
@@ -177,5 +183,5 @@ function SuccessCBGetCast(data) {
                             <span><strong>country:</strong> ${castMember.country}</span>
                         </div>
                     </div>`;
-}
+} כרגע לא בשימוש אבל הפונקציה הקודמת הולכת להצלחה פחות יעילה - לחשוב על זה */
 
