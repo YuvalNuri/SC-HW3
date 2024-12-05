@@ -30,15 +30,16 @@ const apiLogName="https://localhost:7208/api/Users/LogInName";
 const apiLogEmail="https://localhost:7208/api/Users/LogInEmail";
 
 function init() {
-    ajaxCall('Get',apiMovies,null,AllMovies,ErrorCallBack);
+    ajaxCall('Get',apiMovies,null,SuccessAllMovies,ErrorCallBack);
     ajaxCall('GET', apiCast, null, SuccessCBGetAllCast, ErrorCallBack);
     document.getElementById("bdC").max = new Date().toISOString().split('T')[0];
     $("#filter").hide();
     $("#castRow").hide();
     isLoggedIn = false; 
+    connectedUser=0;
 }
 
-function AllMovies(data) {
+function SuccessAllMovies(data) {
     movies = data;
     let strMovies = "";
     for (let i = 0; i < movies.length; i++) {
@@ -88,9 +89,9 @@ function SuccessCBGetAllCast(data) {
 }
 
 function AddToWishList(id) {
-    id2=`[2,${id}]`;
+    id2=`[${connectedUser},${id}]`;
     console.log(id2);
-    ajaxCall('POST', apiAddWish, id2, SuccessCallBack, ErrorCallBack); //change the "2" to the user id
+    ajaxCall('POST', apiAddWish, id2, SuccessCallBack, ErrorCallBack);
 }
 
 function ShowWishList() {
@@ -100,7 +101,7 @@ function ShowWishList() {
     $("#filter").show();
     $("#filterRating").val('');
     $("#filterDuration").val('');
-    ajaxCall('GET', apiGetWish+"2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
+    ajaxCall('GET', apiGetWish+connectedUser, null, SuccessCBWish, ErrorCBWish);
 }
 
 function SuccessCBWish(data) {
@@ -108,6 +109,10 @@ function SuccessCBWish(data) {
     for (let i = 0; i < data.length; i++) {
         $(`#m${data[i]}`).show();
     }
+}
+
+function ErrorCBWish(err){
+    alert(err.responseText);
 }
 
 function ShowAllMovies() {
@@ -121,7 +126,7 @@ function FilterByDur() {
     duration = $("#filterDuration").val();
     $("#filterRating").val('');
     $(".card").hide();
-    ajaxCall('GET', apiDuration + duration+"&u=2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
+    ajaxCall('GET', apiDuration + duration+"&u="+connectedUser, null, SuccessCBWish, ErrorCallBack);
 
 }
 
@@ -129,7 +134,7 @@ function FilterByRate() {
     rating = $("#filterRating").val();
     $("#filterDuration").val('');
     $(".card").hide();
-    ajaxCall('GET', apiRating + rating+"/user/2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
+    ajaxCall('GET', apiRating + rating+"/user/"+connectedUser, null, SuccessCBWish, ErrorCallBack);
 
 }
 
@@ -214,9 +219,9 @@ function UserLogIn(){
     $("#loginForm").submit(function (event) {
         event.preventDefault();
 
-        user = [    
-            $("#userLogIn").val(),
-            $("#passwordLogIn").val()
+        user = [     
+             $("#userLogIn").val(),
+             $("#passwordLogIn").val(),  
         ]
        ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBack);
     });
@@ -224,6 +229,7 @@ function UserLogIn(){
     function SuccessCBUser(data){
 console.log(data);
 isLoggedIn = true; 
+connectedUser=data["id"];
 closeModal();
     }
 }
