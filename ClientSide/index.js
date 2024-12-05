@@ -30,14 +30,15 @@ const apiLogName="https://localhost:7208/api/Users/LogInName";
 const apiLogEmail="https://localhost:7208/api/Users/LogInEmail";
 
 function init() {
-    ajaxCall('Get',apiMovies,null,AllMovies,ErrorCallBack);
+    ajaxCall('Get',apiMovies,null,SuccessAllMovies,ErrorCallBack);
     ajaxCall('GET', apiCast, null, SuccessCBGetAllCast, ErrorCallBack);
     document.getElementById("bdC").max = new Date().toISOString().split('T')[0];
     $("#filter").hide();
     $("#castRow").hide();
+    connectedUser=0;
 }
 
-function AllMovies(data) {
+function SuccessAllMovies(data) {
     movies = data;
     let strMovies = "";
     for (let i = 0; i < movies.length; i++) {
@@ -99,7 +100,7 @@ function ShowWishList() {
     $("#filter").show();
     $("#filterRating").val('');
     $("#filterDuration").val('');
-    ajaxCall('GET', apiGetWish+"2", null, SuccessCBWish, ErrorCallBack); //change the "2" to the user id
+    ajaxCall('GET', apiGetWish+"10", null, SuccessCBWish, ErrorCBWish); //change the "2" to the user id
 }
 
 function SuccessCBWish(data) {
@@ -107,6 +108,10 @@ function SuccessCBWish(data) {
     for (let i = 0; i < data.length; i++) {
         $(`#m${data[i]}`).show();
     }
+}
+
+function ErrorCBWish(err){
+    alert(err.responseText);
 }
 
 function ShowAllMovies() {
@@ -213,15 +218,16 @@ function UserLogIn(){
     $("#loginForm").submit(function (event) {
         event.preventDefault();
 
-        user = {     
-            userName: $("#userLogIn").val(),
-            password: $("#passwordLogIn").val(),  
-        }
+        user = [     
+             $("#userLogIn").val(),
+             $("#passwordLogIn").val(),  
+        ]
        ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBack);
     });
 
     function SuccessCBUser(data){
 console.log(data);
+connectedUser=data["id"];
     }
 }
 
