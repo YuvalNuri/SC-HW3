@@ -185,3 +185,39 @@ function SuccessCBCast(data) {
                     </div>`;
 } כרגע לא בשימוש אבל הפונקציה הקודמת הולכת להצלחה פחות יעילה - לחשוב על זה */
 
+  // Open Modal
+  function openModal() {
+    document.getElementById("authModal").style.display = "flex";
+}
+
+// Close Modal
+function closeModal() {
+    document.getElementById("authModal").style.display = "none";
+}
+
+// Switch to Signup Form
+function switchToSignup() {
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("signupForm").style.display = "block";
+    document.getElementById("modalTitle").innerText = "Signup";
+}
+
+// Switch to Login Form
+function switchToLogin() {
+    document.getElementById("signupForm").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("modalTitle").innerText = "Login";
+}
+
+function UserLogIn(){
+    $("#loginForm").submit(function (event) {
+        //event.preventDefault();
+
+        user = {     
+            userName: $("#nameC").val(),
+            password: $("#roleC").val(),  
+        }
+       // ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBCast, ErrorCallBack);
+    });
+}
+
