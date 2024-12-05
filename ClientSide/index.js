@@ -211,13 +211,17 @@ function switchToLogin() {
 
 function UserLogIn(){
     $("#loginForm").submit(function (event) {
-        //event.preventDefault();
+        event.preventDefault();
 
         user = {     
-            userName: $("#nameC").val(),
-            password: $("#roleC").val(),  
+            userName: $("#userLogIn").val(),
+            password: $("#passwordLogIn").val(),  
         }
-       // ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBCast, ErrorCallBack);
+       ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBack);
     });
+
+    function SuccessCBUser(data){
+console.log(data);
+    }
 }
 
