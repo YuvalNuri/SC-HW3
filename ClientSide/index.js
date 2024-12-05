@@ -213,15 +213,45 @@ function UserLogIn(){
     $("#loginForm").submit(function (event) {
         event.preventDefault();
 
-        user = {     
-            userName: $("#userLogIn").val(),
-            password: $("#passwordLogIn").val(),  
-        }
+        user = [    
+            $("#userLogIn").val(),
+            $("#passwordLogIn").val()
+        ]
        ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBack);
     });
 
     function SuccessCBUser(data){
 console.log(data);
+closeModal();
     }
+}
+
+function registerUser(){
+    $("#signupForm").submit(function (event) {
+        event.preventDefault();
+
+        user = {
+            UserName: $("#userNameReg").val(),
+            Email: $("#emailReg").val(),
+            Password: $("#passwordReg").val()  
+        }
+       ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
+    });
+
+    function SuccessCBReg(data){
+        Swal.fire({
+            title: 'Congratulations!',
+            text: 'You have successfully registered. Welcome aboard! 🎉',
+            icon: 'success'
+          });
+          closeModal();
+        console.log(data);
+
+    }
+
+    function ErrorCallBackUser(err){
+alert(err);
+    }
+
 }
 
