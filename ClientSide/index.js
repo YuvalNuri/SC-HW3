@@ -35,6 +35,7 @@ function init() {
     document.getElementById("bdC").max = new Date().toISOString().split('T')[0];
     $("#filter").hide();
     $("#castRow").hide();
+    isLoggedIn = false; 
 }
 
 function AllMovies(data) {
@@ -222,6 +223,7 @@ function UserLogIn(){
 
     function SuccessCBUser(data){
 console.log(data);
+isLoggedIn = true; 
 closeModal();
     }
 }
@@ -245,6 +247,7 @@ function registerUser(){
             icon: 'success'
           });
           closeModal();
+          isLoggedIn = true; 
         console.log(data);
 
     }
@@ -254,4 +257,6 @@ alert(err);
     }
 
 }
+
+
 
