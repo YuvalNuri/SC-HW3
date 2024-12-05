@@ -13,6 +13,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <script src="movies.js"></script>
     <script src="index.js"></script>
@@ -117,7 +119,7 @@
                             <label>Password</label><br />
                             <input type="password" id="passwordReg" required>
                         </div>
-                        <button type="submit">Signup</button>
+                        <button type="submit" onclick="registerUser()">Signup</button>
                     </form>
                     <p class="switch-link" onclick="switchToLogin()">Already have an account? Login here</p>
                 </div>

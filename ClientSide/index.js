@@ -228,6 +228,36 @@ function UserLogIn(){
     function SuccessCBUser(data){
 console.log(data);
 connectedUser=data["id"];
+closeModal();
     }
+}
+
+function registerUser(){
+    $("#signupForm").submit(function (event) {
+        event.preventDefault();
+
+        user = {
+            UserName: $("#userNameReg").val(),
+            Email: $("#emailReg").val(),
+            Password: $("#passwordReg").val()  
+        }
+       ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
+    });
+
+    function SuccessCBReg(data){
+        Swal.fire({
+            title: 'Congratulations!',
+            text: 'You have successfully registered. Welcome aboard! 🎉',
+            icon: 'success'
+          });
+          closeModal();
+        console.log(data);
+
+    }
+
+    function ErrorCallBackUser(err){
+alert(err);
+    }
+
 }
 
