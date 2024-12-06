@@ -22,21 +22,21 @@ function ErrorCallBack(err) {
 const apiMovies = "https://localhost:7208/api/Movies";
 const apiRating = "https://localhost:7208/api/Movies/rating/";
 const apiDuration = "https://localhost:7208/api/Movies/GetByDuration?duration=";
-const apiAddWish="https://localhost:7208/api/Movies/AddToWishList";
-const apiGetWish="https://localhost:7208/api/Movies/GetWishList?id=";
+const apiAddWish = "https://localhost:7208/api/Movies/AddToWishList";
+const apiGetWish = "https://localhost:7208/api/Movies/GetWishList?id=";
 const apiCast = "https://localhost:7208/api/Casts";
 const apiUser = "https://localhost:7208/api/Users";
-const apiLogName="https://localhost:7208/api/Users/LogInName";
-const apiLogEmail="https://localhost:7208/api/Users/LogInEmail";
+const apiLogName = "https://localhost:7208/api/Users/LogInName";
+const apiLogEmail = "https://localhost:7208/api/Users/LogInEmail";
 
 function init() {
-    ajaxCall('Get',apiMovies,null,SuccessAllMovies,ErrorCallBack);
+    ajaxCall('Get', apiMovies, null, SuccessAllMovies, ErrorCallBack);
     ajaxCall('GET', apiCast, null, SuccessCBGetAllCast, ErrorCallBack);
     document.getElementById("bdC").max = new Date().toISOString().split('T')[0];
     $("#filter").hide();
     $("#castRow").hide();
-    isLoggedIn = false; 
-    connectedUser=0;
+    isLoggedIn = false;
+    connectedUser = 0;
 }
 
 function SuccessAllMovies(data) {
@@ -73,7 +73,7 @@ function SuccessAllMovies(data) {
 function SuccessCBGetAllCast(data) {
     console.log(data);
     let allCasrStr = "";
-    for (let i=0;i<data.length;i++) {
+    for (let i = 0; i < data.length; i++) {
         allCasrStr += `<div class="col-12 col-md-4 col-lg-3 player-card">
                         <img src="${data[i].photoUrl}">
                         <div class="player-info">
@@ -89,7 +89,7 @@ function SuccessCBGetAllCast(data) {
 }
 
 function AddToWishList(id) {
-    id2=`[${connectedUser},${id}]`;
+    id2 = `[${connectedUser},${id}]`;
     console.log(id2);
     ajaxCall('POST', apiAddWish, id2, SuccessCallBack, ErrorCallBack);
 }
@@ -101,7 +101,7 @@ function ShowWishList() {
     $("#filter").show();
     $("#filterRating").val('');
     $("#filterDuration").val('');
-    ajaxCall('GET', apiGetWish+connectedUser, null, SuccessCBWish, ErrorCBWish);
+    ajaxCall('GET', apiGetWish + connectedUser, null, SuccessCBWish, ErrorCBWish);
 }
 
 function SuccessCBWish(data) {
@@ -111,7 +111,7 @@ function SuccessCBWish(data) {
     }
 }
 
-function ErrorCBWish(err){
+function ErrorCBWish(err) {
     alert(err.responseText);
 }
 
@@ -126,7 +126,7 @@ function FilterByDur() {
     duration = $("#filterDuration").val();
     $("#filterRating").val('');
     $(".card").hide();
-    ajaxCall('GET', apiDuration + duration+"&u="+connectedUser, null, SuccessCBWish, ErrorCallBack);
+    ajaxCall('GET', apiDuration + duration + "&u=" + connectedUser, null, SuccessCBWish, ErrorCallBack);
 
 }
 
@@ -134,7 +134,7 @@ function FilterByRate() {
     rating = $("#filterRating").val();
     $("#filterDuration").val('');
     $(".card").hide();
-    ajaxCall('GET', apiRating + rating+"/user/"+connectedUser, null, SuccessCBWish, ErrorCallBack);
+    ajaxCall('GET', apiRating + rating + "/user/" + connectedUser, null, SuccessCBWish, ErrorCallBack);
 
 }
 
@@ -191,8 +191,8 @@ function SuccessCBCast(data) {
                     </div>`;
 } כרגע לא בשימוש אבל הפונקציה הקודמת הולכת להצלחה פחות יעילה - לחשוב על זה */
 
-  // Open Modal
-  function openModal() {
+// Open Modal
+function openModal() {
     document.getElementById("authModal").style.display = "flex";
 }
 
@@ -215,54 +215,113 @@ function switchToLogin() {
     document.getElementById("modalTitle").innerText = "Login";
 }
 
-function UserLogIn(){
+function UserLogIn() {
     $("#loginForm").submit(function (event) {
         event.preventDefault();
 
-        user = [     
-             $("#userLogIn").val(),
-             $("#passwordLogIn").val(),  
+        let user = [
+            $("#userLogIn").val(),
+            $("#passwordLogIn").val(),
         ]
-       ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBack);
+        ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBackUser);
     });
-
-    function SuccessCBUser(data){
-console.log(data);
-isLoggedIn = true; 
-connectedUser=data["id"];
-closeModal();
-    }
 }
 
-function registerUser(){
+function registerUser() {
     $("#signupForm").submit(function (event) {
         event.preventDefault();
 
-        user = {
+        let user = {
             UserName: $("#userNameReg").val(),
             Email: $("#emailReg").val(),
-            Password: $("#passwordReg").val()  
-        }
-       ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
-    });
+            Password: $("#passwordReg").val()
+        };
 
-    function SuccessCBReg(data){
+        userLogInData = [
+            user.UserName,
+            user.Password
+        ];
+
+
+        ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
+    });
+}
+
+function SuccessCBReg(data) {
+    if (data) {
         Swal.fire({
             title: 'Congratulations!',
             text: 'You have successfully registered. Welcome aboard! 🎉',
             icon: 'success'
-          });
-          closeModal();
-          isLoggedIn = true; 
+        });
+
+     
+
+        ajaxCall('POST', apiLogName, JSON.stringify(userLogInData), SuccessCBUser, ErrorCallBackUser);
+    } else {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Registration failed. Please try again.',
+            icon: 'error'
+        });
+    }
+}
+
+function SuccessCBUser(data) {
+    if (data) {
         console.log(data);
-
+        isLoggedIn = true;
+        connectedUser = data["id"];
+        closeModal();
+        showLogin();
+    } else {
+        Swal.fire({
+            title: 'Error!',
+            text: 'Failed to log in. Please try again.',
+            icon: 'error'
+        });
     }
+}
 
-    function ErrorCallBackUser(err){
-alert(err);
-    }
-
+function ErrorCallBackUser(err) {
+    Swal.fire({
+        title: 'Error!',
+        text: 'An error occurred. Please try again later.',
+        icon: 'error'
+    });
+    console.error(err);
 }
 
 
+function showLogin() {
+    updateAuthButton();
+    if (isLoggedIn) {
+        ShowAllMovies();
+        Swal.fire('Logged in successfully!', '', 'success');
+
+    } else {
+        openModal();
+    }
+}
+
+function updateAuthButton() {
+    const authButton = document.getElementById("logInBtn");
+    if (isLoggedIn) {
+        authButton.textContent = "Logout"; // שנה את הטקסט להתנתקות
+    } else {
+        Swal.fire('Logged out successfully!', '', 'info');
+        authButton.textContent = "Login / Signup"; // שנה את הטקסט להתחברות  
+    }
+}
+
+function CheckLogIn() {
+    if (isLoggedIn) {
+        isLoggedIn = false;
+        connectedUser = 0;
+        updateAuthButton();
+    }
+    else {
+        openModal();
+    }
+}
 
