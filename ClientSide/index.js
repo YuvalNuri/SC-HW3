@@ -62,7 +62,7 @@ function SuccessAllMovies(data) {
                     <div class="col-12 desc">
                         ${movies[i].description}
                     </div>
-                    <div class="col-12 wishD">
+                    <div class="col-12 wishD hidden">
                         <button class="btnATWish" onclick="AddToWishList(${movies[i].id})">Add to Wish List</button>
                     </div>
                 </div>
@@ -150,6 +150,7 @@ function ShowCastForm() {
     $("#filter").hide();
     $("#castRow").show();
     $("#movieRow").hide();
+
 }
 
 $(document).ready(function () {
@@ -222,7 +223,7 @@ function switchToLogin() {
 function UserLogIn() {
     $("#loginForm").submit(function (event) {
         event.preventDefault();
-
+        olduser = true;
         let user = [
             $("#userLogIn").val(),
             $("#passwordLogIn").val(),
@@ -258,8 +259,8 @@ function SuccessCBReg(data) {
             icon: 'success'
         });
         ShowAllMovies();
-     
 
+        olduser = false;
         ajaxCall('POST', apiLogName, JSON.stringify(userLogInData), SuccessCBUser, ErrorCallBackUser);
     } else { //??קורה אם השרת מחזיר סטטוס תקין אבל דאטה שקרית - האםם להשאיר או שמיותר
         Swal.fire({
@@ -272,12 +273,20 @@ function SuccessCBReg(data) {
 
 function SuccessCBUser(data) {
     if (data) {
+        if (olduser) {
+            Swal.fire({
+                title: 'Login Successful!',
+                text: 'Welcome back! We’re happy to see you 🎉',
+                icon: 'success',
+                confirmButtonText: 'Continue'
+            });
+        }
         console.log(data);
         isLoggedIn = true;
         connectedUser = data["id"];
         closeModal();
         updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
-       
+
     } else {
         Swal.fire({
             title: 'Error!',
@@ -291,16 +300,41 @@ function updateAuthButton(userName) {
     const authButton = document.getElementById("logInBtn");
     const welcomeMessage = document.getElementById("welcomeMessage");
     const addMovieButton = document.getElementById("addMovieBtn");
+    const addWishListButton = document.getElementById("btnWishList");
+    const btnAllMovies = document.getElementById("btnAllMovies");
+    const moviesDiv = btnAllMovies.parentElement;
+    const btnCastForm = document.getElementById("btnCastForm");
+    const castDiv = btnCastForm.parentElement;
+    const wishBtnDiv = document.getElementsByClassName("wishD");
+    const wishDivs = document.querySelectorAll('.wishD'); // בוחרת את כל ה-divs עם המחלקה wishD
+
+    
 
     if (isLoggedIn) {
         welcomeMessage.style.display = "inline";  // הצג את אלמנט ה-welcome
         welcomeMessage.textContent = `Welcome ${userName}`;  // הוסף את שם המשתמש
         authButton.textContent = "Logout"; // שנה את הטקסט להתנתקות
         addMovieButton.style.display = "inline-block"; // הצג את כפתור הוסף סרט
+        addWishListButton.style.display = "inline-block";
+        moviesDiv.classList.remove('col-6');
+        moviesDiv.classList.add('col-3');
+        castDiv.classList.remove('col-6');
+        castDiv.classList.add('col-3');
+        wishDivs.forEach((div) => {
+            div.classList.remove('hidden');
+        });
     } else {
         welcomeMessage.style.display = "none";  // הסתר את אלמנט ה-welcome אם לא מחובר
         authButton.textContent = "Login / Signup"; // שנה את הטקסט להתחברות
         addMovieButton.style.display = "none"; // הסתר את כפתור הוסף סרט
+        addWishListButton.style.display = "none";
+        moviesDiv.classList.remove('col-3');
+        moviesDiv.classList.add('col-6');
+        castDiv.classList.remove('col-3');
+        castDiv.classList.add('col-6');
+        wishDivs.forEach((div) => {
+            div.classList.add('hidden');
+        });
     }
 }
 
@@ -334,11 +368,13 @@ function CheckLogIn() {
     }
 }
 
-function addMovie(){
+function addMovie() {
     $(".card").hide();
     $("#filter").hide();
     $("#castRow").hide();
     $("#movieRow").show();
+    $("#btnWishList").show();
+
 }
 
 $(document).ready(function () {

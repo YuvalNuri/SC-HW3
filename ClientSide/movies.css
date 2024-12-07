@@ -6,7 +6,6 @@ h1 {
 .menu {
     text-align: center;
     margin-top: 20px;
-    margin-bottom: 20px;
 }
 
 .menu button,
@@ -15,9 +14,13 @@ form button {
     border-radius: 10cap;
     border-color: transparent;
     background-color: rgb(182, 212, 212);
+    margin-bottom: 10px;
+    height: 80%;
 }
 
-
+.menu div {
+    padding: 0;
+}
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
@@ -127,7 +130,8 @@ input {
     min-height: 80px;
 }
 
-#castRow, #movieRow{
+#castRow,
+#movieRow {
     background-color: rgb(242, 245, 248);
     border-radius: 20px;
     margin: 0 50px;
@@ -142,30 +146,35 @@ label {
     font-weight: bold;
 }
 
-#castForm, #movieForm {
+#castForm,
+#movieForm {
     width: 100%;
     padding: 20px 100px;
 }
 
 @media (max-width: 576px) {
-    #castForm, #movieForm {
+
+    #castForm,
+    #movieForm {
         padding: 20px 20px;
     }
 }
 
-#castForm div, #movieForm div {
+#castForm div,
+#movieForm div {
     text-align: center;
 }
 
-#castForm div button, #movieForm div button {
+#castForm div button,
+#movieForm div button {
     margin-top: 20px;
     width: 50%;
 }
 
-#castForm input , 
-#movieForm input, 
+#castForm input,
+#movieForm input,
 #movieForm textarea,
-#movieForm select{
+#movieForm select {
     width: 100%;
     margin-bottom: 10px;
 }
@@ -276,11 +285,18 @@ label {
 }
 
 #welcomeMessage {
-    float: right;
-    margin: 10px 10px 0px 0px;
+    margin: 10px 0px 0px 10px;
 }
 
-#addMovieBtn {
+.hidden {
+    display: none;
+}
+
+.col-md-6.col-lg-4.card{
+    margin-bottom: 3px;
+}
+
+#logInBtn {
     border-radius: 10cap;
     border-color: transparent;
     background-color: rgb(182, 212, 212);
@@ -288,14 +304,3 @@ label {
     margin-top: 10px;
     margin-left: 10px;
 }
-
-#logInBtn {
-    border-radius: 10cap;
-    border-color: transparent;
-    background-color: rgb(182, 212, 212);
-    float: right;
-    width: 150px;
-    margin-top: 10px;
-    margin-right: 10px;
-}
-
