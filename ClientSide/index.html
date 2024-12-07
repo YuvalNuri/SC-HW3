@@ -26,6 +26,9 @@
 <body onload="init()">
     <div id="logBtn-div">
         <button id="logInBtn" onclick="CheckLogIn()">Login / Signup</button>
+        <span id="welcomeMessage" style="display: none;"></span>
+        <button id="addMovieBtn" style="display:none;" onclick="addMovie()">Add Movie</button>
+
     </div>
 
     <div class="container">
@@ -34,6 +37,9 @@
             <div class="col-4"><button id="btnAllMovies" onclick="ShowAllMovies()">All Movies</button></div>
             <div class="col-4"><button id="btnWishList" onclick="ShowWishList()">Wishlist</button></div>
             <div class="col-4"><button id="btnCastForm" onclick="ShowCastForm()">Cast Form</button></div>
+        </div>
+        <div>
+            
         </div>
         <div class="row" id="filter">
             <div class="col-12 col-lg-6">

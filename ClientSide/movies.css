@@ -9,22 +9,14 @@ h1 {
     margin-bottom: 20px;
 }
 
-.menu button, form button {
+.menu button,
+form button {
     width: 90%;
     border-radius: 10cap;
     border-color: transparent;
     background-color: rgb(182, 212, 212);
 }
 
-#logInBtn{
-    border-radius: 10cap;
-    border-color: transparent;
-    background-color: rgb(182, 212, 212);
-    float: right;
-    width: 150px;
-    margin-top: 10px;
-    margin-right: 10px;
-}
 
 
 .card {
@@ -104,19 +96,19 @@ div.cardPart {
     padding: 0 5px;
 }
 
-input{
-background-color: transparent;
-border: rgb(182, 212, 212) solid 2px;
-border-radius: 5px;
-padding: 10px;
+input {
+    background-color: transparent;
+    border: rgb(182, 212, 212) solid 2px;
+    border-radius: 5px;
+    padding: 10px;
 }
 
-#filter div input{
+#filter div input {
     width: 70%;
     float: left;
 }
 
-#filter div button{
+#filter div button {
     width: 25%;
     float: right;
     background-color: rgb(182, 212, 212);
@@ -124,26 +116,27 @@ padding: 10px;
     border-radius: 5px;
 }
 
-#filter div p, #filter{
+#filter div p,
+#filter {
     margin-bottom: 5px;
 }
 
-#castRow{
+#castRow {
     background-color: rgb(242, 245, 248);
     border-radius: 20px;
     margin: 0 50px;
     margin-bottom: 50px;
 }
 
-.required{
+.required {
     color: red;
 }
 
-label{
+label {
     font-weight: bold;
 }
 
-#castForm{
+#castForm {
     width: 100%;
     padding: 20px 100px;
 }
@@ -154,16 +147,16 @@ label{
     }
 }
 
-#castForm div{
+#castForm div {
     text-align: center;
 }
 
-#castForm div button{
+#castForm div button {
     margin-top: 20px;
     width: 50%;
 }
 
-#castForm input{
+#castForm input {
     width: 100%;
     margin-bottom: 10px;
 }
@@ -209,7 +202,8 @@ label{
 }
 
 .modal {
-    display: none; /* Hidden by default */
+    display: none;
+    /* Hidden by default */
     position: fixed;
     top: 0;
     left: 0;
@@ -261,13 +255,37 @@ label{
     text-decoration: underline;
 }
 
-#modal-head{
+#modal-head {
     justify-content: center;
     padding: 0;
     padding-bottom: 1rem;
 }
 
-#logBtn-div{
+#logBtn-div {
     height: 30px;
     margin-bottom: 10px;
+}
+
+#welcomeMessage {
+    float: right;
+    margin: 10px 10px 0px 0px;
+}
+
+#addMovieBtn {
+    border-radius: 10cap;
+    border-color: transparent;
+    background-color: rgb(182, 212, 212);
+    width: 150px;
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#logInBtn {
+    border-radius: 10cap;
+    border-color: transparent;
+    background-color: rgb(182, 212, 212);
+    float: right;
+    width: 150px;
+    margin-top: 10px;
+    margin-right: 10px;
 }

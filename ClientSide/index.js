@@ -254,11 +254,11 @@ function SuccessCBReg(data) {
             text: 'You have successfully registered. Welcome aboard! 🎉',
             icon: 'success'
         });
-
+        ShowAllMovies();
      
 
         ajaxCall('POST', apiLogName, JSON.stringify(userLogInData), SuccessCBUser, ErrorCallBackUser);
-    } else {
+    } else { //??קורה אם השרת מחזיר סטטוס תקין אבל דאטה שקרית - האםם להשאיר או שמיותר
         Swal.fire({
             title: 'Error!',
             text: 'Registration failed. Please try again.',
@@ -273,7 +273,8 @@ function SuccessCBUser(data) {
         isLoggedIn = true;
         connectedUser = data["id"];
         closeModal();
-        showLogin();
+        updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
+       
     } else {
         Swal.fire({
             title: 'Error!',
@@ -282,6 +283,24 @@ function SuccessCBUser(data) {
         });
     }
 }
+
+function updateAuthButton(userName) {
+    const authButton = document.getElementById("logInBtn");
+    const welcomeMessage = document.getElementById("welcomeMessage");
+    const addMovieButton = document.getElementById("addMovieBtn");
+
+    if (isLoggedIn) {
+        welcomeMessage.style.display = "inline";  // הצג את אלמנט ה-welcome
+        welcomeMessage.textContent = `Welcome ${userName}`;  // הוסף את שם המשתמש
+        authButton.textContent = "Logout"; // שנה את הטקסט להתנתקות
+        addMovieButton.style.display = "inline-block"; // הצג את כפתור הוסף סרט
+    } else {
+        welcomeMessage.style.display = "none";  // הסתר את אלמנט ה-welcome אם לא מחובר
+        authButton.textContent = "Login / Signup"; // שנה את הטקסט להתחברות
+        addMovieButton.style.display = "none"; // הסתר את כפתור הוסף סרט
+    }
+}
+
 
 function ErrorCallBackUser(err) {
     Swal.fire({
@@ -293,32 +312,19 @@ function ErrorCallBackUser(err) {
 }
 
 
-function showLogin() {
-    updateAuthButton();
-    if (isLoggedIn) {
-        ShowAllMovies();
-        Swal.fire('Logged in successfully!', '', 'success');
-
-    } else {
-        openModal();
-    }
-}
-
-function updateAuthButton() {
-    const authButton = document.getElementById("logInBtn");
-    if (isLoggedIn) {
-        authButton.textContent = "Logout"; // שנה את הטקסט להתנתקות
-    } else {
-        Swal.fire('Logged out successfully!', '', 'info');
-        authButton.textContent = "Login / Signup"; // שנה את הטקסט להתחברות  
-    }
-}
-
 function CheckLogIn() {
     if (isLoggedIn) {
         isLoggedIn = false;
+        ShowAllMovies();
         connectedUser = 0;
         updateAuthButton();
+        Swal.fire({
+            title: 'Logged out successfully!',
+            text: 'See you next time!',
+            icon: 'info',
+            timer: 2000, // המחווה תיסגר אוטומטית לאחר 2 שניות
+            showConfirmButton: false // הסתרת כפתור "אישור"
+        });
     }
     else {
         openModal();
