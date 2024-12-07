@@ -35,6 +35,7 @@ function init() {
     document.getElementById("bdC").max = new Date().toISOString().split('T')[0];
     $("#filter").hide();
     $("#castRow").hide();
+    $("#movieRow").hide();
     isLoggedIn = false;
     connectedUser = 0;
 }
@@ -99,6 +100,7 @@ function ShowWishList() {
     $(".card").hide();
     $("#castRow").hide();
     $("#filter").show();
+    $("#movieRow").hide();
     $("#filterRating").val('');
     $("#filterDuration").val('');
     ajaxCall('GET', apiGetWish + connectedUser, null, SuccessCBWish, ErrorCBWish);
@@ -120,6 +122,7 @@ function ShowAllMovies() {
     $(".wishD").show();
     $("#filter").hide();
     $("#castRow").hide();
+    $("#movieRow").hide();
 }
 
 function FilterByDur() {
@@ -146,6 +149,7 @@ function ShowCastForm() {
     $(".card").hide();
     $("#filter").hide();
     $("#castRow").show();
+    $("#movieRow").hide();
 }
 
 $(document).ready(function () {
@@ -242,7 +246,6 @@ function registerUser() {
             user.Password
         ];
 
-
         ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
     });
 }
@@ -331,3 +334,51 @@ function CheckLogIn() {
     }
 }
 
+function addMovie(){
+    $(".card").hide();
+    $("#filter").hide();
+    $("#castRow").hide();
+    $("#movieRow").show();
+}
+
+$(document).ready(function () {
+    $("#movieRow").submit(function (event) {
+        event.preventDefault();
+
+        movie = {
+            Title: $("#titleM").val(),
+            Rating: $("#ratingM").val(),
+            Income: $("#incomeM").val(),
+            ReleaseYear: $("#releaseYearM").val(),
+            Duration: $("#durationM").val(),
+            Language: $("#languageM").val(),
+            Description: $("#descriptionM").val(),
+            Genre: $("#genreM").val(),
+            PhotoUrl: $("#photoUrlM").val(),
+        }
+        ajaxCall('POST', apiMovies, JSON.stringify(movie), SuccessCBMovie, ErrorCallBackMovie);
+    });
+});
+
+function SuccessCBMovie(data) {
+    Swal.fire({
+        title: "Movie Added!",
+        text: "The movie was successfully added to the database!",
+        icon: "success",
+        confirmButtonText: "OK"
+    });
+    console.log("Movie added successfully:", data);
+
+    // אופציונלי: אפס את הטופס לאחר הצלחה
+    document.getElementById("movieForm").reset();
+}
+
+function ErrorCallBackMovie(err) {
+    Swal.fire({
+        title: "Failed to Add Movie",
+        text: "There was an error while adding the movie. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK"
+    });
+    console.error("Error adding movie:", err);
+}

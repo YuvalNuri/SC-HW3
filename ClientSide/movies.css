@@ -121,7 +121,13 @@ input {
     margin-bottom: 5px;
 }
 
-#castRow {
+
+#movieForm textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#castRow, #movieRow{
     background-color: rgb(242, 245, 248);
     border-radius: 20px;
     margin: 0 50px;
@@ -136,27 +142,30 @@ label {
     font-weight: bold;
 }
 
-#castForm {
+#castForm, #movieForm {
     width: 100%;
     padding: 20px 100px;
 }
 
 @media (max-width: 576px) {
-    #castForm {
+    #castForm, #movieForm {
         padding: 20px 20px;
     }
 }
 
-#castForm div {
+#castForm div, #movieForm div {
     text-align: center;
 }
 
-#castForm div button {
+#castForm div button, #movieForm div button {
     margin-top: 20px;
     width: 50%;
 }
 
-#castForm input {
+#castForm input , 
+#movieForm input, 
+#movieForm textarea,
+#movieForm select{
     width: 100%;
     margin-bottom: 10px;
 }
@@ -289,3 +298,4 @@ label {
     margin-top: 10px;
     margin-right: 10px;
 }
+
