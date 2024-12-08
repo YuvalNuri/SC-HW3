@@ -248,11 +248,11 @@ function SuccessCBReg(data) {
         icon: 'success'
     });
     connectedUser = data["id"];
+    remember = document.getElementById('rememberBoxReg').checked;
+    console.log(remember + " remember");
     closeModal();
     updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
     ShowAllMovies();
-    remember = document.getElementById('rememberBoxReg').checked;
-    console.log(remember + " remember");
     if (remember) {
         localStorage["connectedUser"] = connectedUser;
         localStorage["userName"] = data["userName"];
@@ -269,10 +269,10 @@ function SuccessCBUser(data) {
         confirmButtonText: 'Continue'
     });
     connectedUser = data["id"];
-    closeModal();
-    updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
     remember = document.getElementById('rememberBoxLog').checked;
     console.log(remember + " remember");
+    closeModal();
+    updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
     if (remember) {
         localStorage["connectedUser"] = connectedUser;
         localStorage["userName"] = data["userName"];
