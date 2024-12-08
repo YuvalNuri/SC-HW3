@@ -220,10 +220,10 @@ function openModal() {
 
 // Close Modal
 function closeModal() {
-    $("#loginForm").reset();
-    document.getElementById('rememberBoxLog').checked=false;
-    $("#signupForm").reset();
-    document.getElementById('rememberBoxReg').checked=false;
+    $("#loginForm")[0].reset(); 
+    $("#signupForm")[0].reset(); 
+    $('#rememberBoxLog').prop('checked', false); 
+    $('#rememberBoxReg').prop('checked', false); 
     document.getElementById("authModal").style.display = "none";
 }
 
