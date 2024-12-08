@@ -243,7 +243,7 @@ function SuccessCBReg(data) {
         text: 'You have successfully registered. Welcome aboard! 🎉',
         icon: 'success'
     });
-
+    remember = document.getElementById('rememberBoxReg').checked;
     connectedUser = data["id"];
     closeModal();
     updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
@@ -263,7 +263,7 @@ function SuccessCBUser(data) {
         icon: 'success',
         confirmButtonText: 'Continue'
     });
-
+    remember = document.getElementById('rememberBoxLog').checked;
     connectedUser = data["id"];
     closeModal();
     updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
@@ -398,18 +398,9 @@ $(document).ready(function () {
             Email: $("#emailReg").val(),
             Password: $("#passwordReg").val()
         };
-
         ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
     });
 
-    $(".rememberBox").click(function () {
-        // בודק אם ה-checkbox מסומן
-        if ($("#rememberBoxLog").is(":checked") || $("#rememberBoxReg").is(":checked")) {
-            remember = true;
-        }
-        else
-            remember = false;
-    });
 });
 
 function SuccessCBMovie(data) {
