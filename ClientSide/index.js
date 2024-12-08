@@ -37,14 +37,20 @@ function init() {
     $("#castRow").hide();
     $("#movieRow").hide();
 
+    console.log("hi");
     if (localStorage["connectedUser"] != undefined) {
+        console("yes");
         connectedUser = localStorage["connectedUser"];
         updateAuthButton(localStorage["userName"]);
         remember = true;
+        console.log(remember);
     }
     else {
+        console.log("no");
         connectedUser = 0;
         remember = false;
+        $(".wishD").hide();
+        console.log(remember);
     }
 }
 
@@ -100,7 +106,16 @@ function SuccessCBGetAllCast(data) {
 function AddToWishList(id) {
     id2 = `[${connectedUser},${id}]`;
     console.log(id2);
-    ajaxCall('POST', apiAddWish, id2, SuccessCallBack, ErrorCallBack);
+    ajaxCall('POST', apiAddWish, id2, SuccessCBAddWL, ErrorCallBack);
+}
+
+function SuccessCBAddWL(data){
+    Swal.fire({
+        title: 'Movie Added To WishList!',
+        icon: 'success',
+        timer: 1000, // המחווה תיסגר אוטומטית לאחר 2 שניות
+        showConfirmButton: false // הסתרת כפתור "אישור"
+    });
 }
 
 function ShowWishList() {
