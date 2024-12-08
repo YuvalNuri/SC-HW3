@@ -382,15 +382,16 @@ $(document).ready(function () {
         event.preventDefault();
 
         movie = {
-            Title: $("#titleM").val(),
-            Rating: $("#ratingM").val(),
-            Income: $("#incomeM").val(),
-            ReleaseYear: $("#releaseYearM").val(),
-            Duration: $("#durationM").val(),
-            Language: $("#languageM").val(),
-            Description: $("#descriptionM").val(),
-            Genre: $("#genreM").val(),
-            PhotoUrl: $("#photoUrlM").val(),
+            id:0,
+            title: $("#titleM").val(),
+            rating: $("#ratingM").val(),
+            income: $("#incomeM").val(),
+            releaseYear: $("#releaseYearM").val(),
+            duration: $("#durationM").val(),
+            language: $("#languageM").val(),
+            description: $("#descriptionM").val(),
+            genre: $("#genreM").val(),
+            photoUrl: $("#photoUrlM").val(),
         }
         ajaxCall('POST', apiMovies, JSON.stringify(movie), SuccessCBMovie, ErrorCallBackMovie);
     });
