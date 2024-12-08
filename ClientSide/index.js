@@ -220,6 +220,8 @@ function openModal() {
 
 // Close Modal
 function closeModal() {
+    $("#loginForm").reset();
+    $("#signupForm").reset();
     document.getElementById("authModal").style.display = "none";
 }
 
