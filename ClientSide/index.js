@@ -19,15 +19,14 @@ function ErrorCallBack(err) {
     console.log(err);
 }
 
-const apiMovies = "https://localhost:7208/api/Movies";
-const apiRating = "https://localhost:7208/api/Movies/rating/";
-const apiDuration = "https://localhost:7208/api/Movies/GetByDuration?duration=";
-const apiAddWish = "https://localhost:7208/api/Movies/AddToWishList";
-const apiGetWish = "https://localhost:7208/api/Movies/GetWishList?id=";
-const apiCast = "https://localhost:7208/api/Casts";
-const apiUser = "https://localhost:7208/api/Users";
-const apiLogName = "https://localhost:7208/api/Users/LogInName";
-const apiLogEmail = "https://localhost:7208/api/Users/LogInEmail";
+const apiMovies = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies";
+const apiRating = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies/rating/";
+const apiDuration = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies/GetByDuration?duration=";
+const apiAddWish = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies/AddToWishList";
+const apiGetWish = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Movies/GetWishList?id=";
+const apiCast = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Casts";
+const apiUser = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Users";
+const apiLogName = "https://proj.ruppin.ac.il/bgroup2/test2/tar1/api/Users/LogInName";
 
 function init() {
     ajaxCall('Get', apiMovies, null, SuccessAllMovies, ErrorCallBack);
