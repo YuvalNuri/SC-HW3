@@ -11,10 +11,6 @@ function ajaxCall(method, api, data, successCB, errorCB) {
     });
 }
 
-function SuccessCallBack(data) {
-    console.log(data);
-}
-
 function ErrorCallBack(err) {
     console.log(err);
 }
@@ -249,7 +245,6 @@ function SuccessCBReg(data) {
     });
     connectedUser = data["id"];
     remember = document.getElementById('rememberBoxReg').checked;
-    console.log(remember, " remember");
     closeModal();
     updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
     ShowAllMovies();
@@ -270,7 +265,6 @@ function SuccessCBUser(data) {
     });
     connectedUser = data["id"];
     remember = document.getElementById('rememberBoxLog').checked;
-    console.log(remember, " remember");
     closeModal();
     updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
     if (remember) {
