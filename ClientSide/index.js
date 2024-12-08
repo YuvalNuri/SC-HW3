@@ -332,7 +332,7 @@ function CheckLogIn() {
             timer: 2000, // המחווה תיסגר אוטומטית לאחר 2 שניות
             showConfirmButton: false // הסתרת כפתור "אישור"
         });
-        remember=false
+        remember=false;
     }
     else {
         openModal();
