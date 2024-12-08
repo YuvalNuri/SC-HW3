@@ -221,7 +221,9 @@ function openModal() {
 // Close Modal
 function closeModal() {
     $("#loginForm").reset();
+    document.getElementById('rememberBoxLog').checked=false;
     $("#signupForm").reset();
+    document.getElementById('rememberBoxReg').checked=false;
     document.getElementById("authModal").style.display = "none";
 }
 
