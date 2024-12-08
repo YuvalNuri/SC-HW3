@@ -37,19 +37,15 @@ function init() {
     $("#castRow").hide();
     $("#movieRow").hide();
 
-    console.log("hi");
     if (localStorage["connectedUser"] != undefined) {
-        console("yes");
         connectedUser = localStorage["connectedUser"];
         updateAuthButton(localStorage["userName"]);
         remember = true;
         console.log(remember);
     }
     else {
-        console.log("no");
         connectedUser = 0;
         remember = false;
-        $(".wishD").hide();
         console.log(remember);
     }
 }
@@ -83,6 +79,10 @@ function SuccessAllMovies(data) {
             </div>`;
     }
     document.getElementById("AllMovies").innerHTML = strMovies;
+    if (connectedUser!=0)
+        $(".wishD").show();
+    else
+        $(".wishD").hide();
 }
 
 function SuccessCBGetAllCast(data) {
@@ -109,7 +109,7 @@ function AddToWishList(id) {
     ajaxCall('POST', apiAddWish, id2, SuccessCBAddWL, ErrorCallBack);
 }
 
-function SuccessCBAddWL(data){
+function SuccessCBAddWL(data) {
     Swal.fire({
         title: 'Movie Added To WishList!',
         icon: 'success',
@@ -147,7 +147,10 @@ function ErrorCBWish(err) {
 
 function ShowAllMovies() {
     $(".card").show();
-    $(".wishD").show();
+    if (connectedUser!=0)
+        $(".wishD").show();
+    else
+        $(".wishD").hide();
     $("#filter").hide();
     $("#castRow").hide();
     $("#movieRow").hide();
@@ -436,7 +439,7 @@ function SuccessCBMovie(data) {
         </div>
     </div>
 </div>`;
-$(`#m${data.id}`).hide();
+    $(`#m${data.id}`).hide();
     // אופציונלי: אפס את הטופס לאחר הצלחה
     document.getElementById("movieForm").reset();
 }
