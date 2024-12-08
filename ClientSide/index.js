@@ -78,7 +78,7 @@ function SuccessAllMovies(data) {
             </div>`;
     }
     document.getElementById("AllMovies").innerHTML = strMovies;
-    if (connectedUser!=0)
+    if (connectedUser != 0)
         $(".wishD").show();
     else
         $(".wishD").hide();
@@ -146,7 +146,7 @@ function ErrorCBWish(err) {
 
 function ShowAllMovies() {
     $(".card").show();
-    if (connectedUser!=0)
+    if (connectedUser != 0)
         $(".wishD").show();
     else
         $(".wishD").hide();
@@ -332,6 +332,7 @@ function CheckLogIn() {
             timer: 2000, // המחווה תיסגר אוטומטית לאחר 2 שניות
             showConfirmButton: false // הסתרת כפתור "אישור"
         });
+        remember=false
     }
     else {
         openModal();
@@ -406,6 +407,8 @@ $(document).ready(function () {
         if ($("#rememberBoxLog").is(":checked") || $("#rememberBoxReg").is(":checked")) {
             remember = true;
         }
+        else
+            remember = false;
     });
 });
 
