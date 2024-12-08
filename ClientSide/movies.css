@@ -179,6 +179,13 @@ label {
     margin-bottom: 10px;
 }
 
+.rememberBox, #movieForm textarea, #movieForm select{
+    background-color: transparent;
+    border: rgb(182, 212, 212) solid 2px;
+    border-radius: 5px;
+    padding: 10px;
+}
+
 #CastMembers {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -286,10 +293,6 @@ label {
 
 #welcomeMessage {
     margin: 10px 0px 0px 10px;
-}
-
-.hidden {
-    display: none;
 }
 
 .col-md-6.col-lg-4.card{

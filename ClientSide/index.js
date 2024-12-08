@@ -36,8 +36,16 @@ function init() {
     $("#filter").hide();
     $("#castRow").hide();
     $("#movieRow").hide();
-    isLoggedIn = false;
-    connectedUser = 0;
+
+    if (localStorage["connectedUser"] != undefined) {
+        connectedUser = localStorage["connectedUser"];
+        updateAuthButton(localStorage["userName"]);
+        remember = true;
+    }
+    else {
+        connectedUser = 0;
+        remember = false;
+    }
 }
 
 function SuccessAllMovies(data) {
@@ -114,7 +122,12 @@ function SuccessCBWish(data) {
 }
 
 function ErrorCBWish(err) {
-    alert(err.responseText);
+    Swal.fire({
+        title: 'Error!',
+        text: err.responseText,
+        icon: 'error'
+    });
+
 }
 
 function ShowAllMovies() {
@@ -153,48 +166,35 @@ function ShowCastForm() {
 
 }
 
-$(document).ready(function () {
-    $("#castForm").submit(function (event) {
-        event.preventDefault();
-
-        cast = {
-            Id: $("#idC").val(),
-            Name: $("#nameC").val(),
-            Role: $("#roleC").val(),
-            DateOfBirth: $("#bdC").val(),
-            Country: $("#countryC").val(),
-            PhotoUrl: $("#phuC").val(),
-        }
-        ajaxCall('POST', apiCast, JSON.stringify(cast), SuccessCBCast, ErrorCallBack);
-    });
-});
-
 function SuccessCBCast(data) {
     console.log(data);
-    if (!data) {
-        alert("Something went wrong! Check if this ID is already taken!");
-    }
-    else {
-        $("#castForm")[0].reset();
-        ajaxCall('GET', apiCast, null, SuccessCBGetAllCast, ErrorCallBack);
-    }
-}
-
-/*function SuccessCBGetCast(data) {
-    console.log(data);
-    castMember = data[data.length - 1];
+    Swal.fire({
+        title: 'Cast Added successfully!',
+        icon: 'success',
+        timer: 2000, // המחווה תיסגר אוטומטית לאחר 2 שניות
+        showConfirmButton: false // הסתרת כפתור "אישור"
+    });
+    $("#castForm")[0].reset();
     document.getElementById("CMrow").innerHTML +=
         `<div class="col-12 col-md-4 col-lg-3 player-card">
-                        <img src="${castMember.photoUrl}">
+                        <img src="${data.photoUrl}">
                         <div class="player-info">
-                            <span><strong>id:</strong> ${castMember.id}</span>
-                            <span><strong>name:</strong> ${castMember.name}</span>
-                            <span><strong>role:</strong> ${castMember.role}</span>
-                            <span><strong>date of birth:</strong> ${castMember.dateOfBirth.toString().split('T')[0]}</span>
-                            <span><strong>country:</strong> ${castMember.country}</span>
+                            <span><strong>id:</strong> ${data.id}</span>
+                            <span><strong>name:</strong> ${data.name}</span>
+                            <span><strong>role:</strong> ${data.role}</span>
+                            <span><strong>date of birth:</strong> ${data.dateOfBirth.toString().split('T')[0]}</span>
+                            <span><strong>country:</strong> ${data.country}</span>
                         </div>
                     </div>`;
-} כרגע לא בשימוש אבל הפונקציה הקודמת הולכת להצלחה פחות יעילה - לחשוב על זה */
+}
+
+function ErrorCBCast(err) {
+    Swal.fire({
+        title: 'Error!',
+        text: 'Something went wrong! Check if this ID is already taken!',
+        icon: 'error'
+    });
+}
 
 // Open Modal
 function openModal() {
@@ -208,91 +208,51 @@ function closeModal() {
 
 // Switch to Signup Form
 function switchToSignup() {
-    document.getElementById("loginForm").style.display = "none";
-    document.getElementById("signupForm").style.display = "block";
+    document.getElementById("loginFormDiv").style.display = "none";
+    document.getElementById("signupFormDiv").style.display = "block";
     document.getElementById("modalTitle").innerText = "Signup";
 }
 
 // Switch to Login Form
 function switchToLogin() {
-    document.getElementById("signupForm").style.display = "none";
-    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("signupFormDiv").style.display = "none";
+    document.getElementById("loginFormDiv").style.display = "block";
     document.getElementById("modalTitle").innerText = "Login";
 }
 
-function UserLogIn() {
-    $("#loginForm").submit(function (event) {
-        event.preventDefault();
-        olduser = true;
-        let user = [
-            $("#userLogIn").val(),
-            $("#passwordLogIn").val(),
-        ]
-        ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBackUser);
-    });
-}
-
-function registerUser() {
-    $("#signupForm").submit(function (event) {
-        event.preventDefault();
-
-        let user = {
-            UserName: $("#userNameReg").val(),
-            Email: $("#emailReg").val(),
-            Password: $("#passwordReg").val()
-        };
-
-        userLogInData = [
-            user.UserName,
-            user.Password
-        ];
-
-        ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
-    });
-}
-
 function SuccessCBReg(data) {
-    if (data) {
-        Swal.fire({
-            title: 'Congratulations!',
-            text: 'You have successfully registered. Welcome aboard! 🎉',
-            icon: 'success'
-        });
-        ShowAllMovies();
+    Swal.fire({
+        title: 'Congratulations!',
+        text: 'You have successfully registered. Welcome aboard! 🎉',
+        icon: 'success'
+    });
 
-        olduser = false;
-        ajaxCall('POST', apiLogName, JSON.stringify(userLogInData), SuccessCBUser, ErrorCallBackUser);
-    } else { //??קורה אם השרת מחזיר סטטוס תקין אבל דאטה שקרית - האםם להשאיר או שמיותר
-        Swal.fire({
-            title: 'Error!',
-            text: 'Registration failed. Please try again.',
-            icon: 'error'
-        });
+    connectedUser = data["id"];
+    closeModal();
+    updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
+    ShowAllMovies();
+    if (remember) {
+        localStorage["connectedUser"] = connectedUser;
+        localStorage["userName"] = data["userName"];
     }
 }
 
-function SuccessCBUser(data) {
-    if (data) {
-        if (olduser) {
-            Swal.fire({
-                title: 'Login Successful!',
-                text: 'Welcome back! We’re happy to see you 🎉',
-                icon: 'success',
-                confirmButtonText: 'Continue'
-            });
-        }
-        console.log(data);
-        isLoggedIn = true;
-        connectedUser = data["id"];
-        closeModal();
-        updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
 
-    } else {
-        Swal.fire({
-            title: 'Error!',
-            text: 'Failed to log in. Please try again.',
-            icon: 'error'
-        });
+function SuccessCBUser(data) {
+
+    Swal.fire({
+        title: 'Login Successful!',
+        text: 'Welcome back! We’re happy to see you 🎉',
+        icon: 'success',
+        confirmButtonText: 'Continue'
+    });
+
+    connectedUser = data["id"];
+    closeModal();
+    updateAuthButton(data["userName"]);  // עדכן את כפתור ההתנתקות עם שם המשתמש
+    if (remember) {
+        localStorage["connectedUser"] = connectedUser;
+        localStorage["userName"] = data["userName"];
     }
 }
 
@@ -305,12 +265,9 @@ function updateAuthButton(userName) {
     const moviesDiv = btnAllMovies.parentElement;
     const btnCastForm = document.getElementById("btnCastForm");
     const castDiv = btnCastForm.parentElement;
-    const wishBtnDiv = document.getElementsByClassName("wishD");
-    const wishDivs = document.querySelectorAll('.wishD'); // בוחרת את כל ה-divs עם המחלקה wishD
 
-    
 
-    if (isLoggedIn) {
+    if (connectedUser != 0) {
         welcomeMessage.style.display = "inline";  // הצג את אלמנט ה-welcome
         welcomeMessage.textContent = `Welcome ${userName}`;  // הוסף את שם המשתמש
         authButton.textContent = "Logout"; // שנה את הטקסט להתנתקות
@@ -320,9 +277,7 @@ function updateAuthButton(userName) {
         moviesDiv.classList.add('col-3');
         castDiv.classList.remove('col-6');
         castDiv.classList.add('col-3');
-        wishDivs.forEach((div) => {
-            div.classList.remove('hidden');
-        });
+        $(".wishD").show();
     } else {
         welcomeMessage.style.display = "none";  // הסתר את אלמנט ה-welcome אם לא מחובר
         authButton.textContent = "Login / Signup"; // שנה את הטקסט להתחברות
@@ -332,9 +287,7 @@ function updateAuthButton(userName) {
         moviesDiv.classList.add('col-6');
         castDiv.classList.remove('col-3');
         castDiv.classList.add('col-6');
-        wishDivs.forEach((div) => {
-            div.classList.add('hidden');
-        });
+        $(".wishD").hide();
     }
 }
 
@@ -350,10 +303,10 @@ function ErrorCallBackUser(err) {
 
 
 function CheckLogIn() {
-    if (isLoggedIn) {
-        isLoggedIn = false;
-        ShowAllMovies();
+    if (connectedUser != 0) {
         connectedUser = 0;
+        localStorage.clear();
+        ShowAllMovies();
         updateAuthButton();
         Swal.fire({
             title: 'Logged out successfully!',
@@ -382,7 +335,7 @@ $(document).ready(function () {
         event.preventDefault();
 
         movie = {
-            id:0,
+            id: 0,
             title: $("#titleM").val(),
             rating: $("#ratingM").val(),
             income: $("#incomeM").val(),
@@ -395,6 +348,48 @@ $(document).ready(function () {
         }
         ajaxCall('POST', apiMovies, JSON.stringify(movie), SuccessCBMovie, ErrorCallBackMovie);
     });
+
+    $("#castForm").submit(function (event) {
+        event.preventDefault();
+
+        cast = {
+            Id: $("#idC").val(),
+            Name: $("#nameC").val(),
+            Role: $("#roleC").val(),
+            DateOfBirth: $("#bdC").val(),
+            Country: $("#countryC").val(),
+            PhotoUrl: $("#phuC").val(),
+        }
+        ajaxCall('POST', apiCast, JSON.stringify(cast), SuccessCBCast, ErrorCBCast);
+    });
+
+    $("#loginForm").submit(function (event) {
+        event.preventDefault();
+        let user = [
+            $("#userLogIn").val(),
+            $("#passwordLogIn").val(),
+        ]
+        ajaxCall('POST', apiLogName, JSON.stringify(user), SuccessCBUser, ErrorCallBackUser);
+    });
+
+    $("#signupForm").submit(function (event) {
+        event.preventDefault();
+
+        let user = {
+            UserName: $("#userNameReg").val(),
+            Email: $("#emailReg").val(),
+            Password: $("#passwordReg").val()
+        };
+
+        ajaxCall('POST', apiUser, JSON.stringify(user), SuccessCBReg, ErrorCallBackUser);
+    });
+
+    $(".rememberBox").click(function () {
+        // בודק אם ה-checkbox מסומן
+        if ($("#rememberBoxLog").is(":checked") || $("#rememberBoxReg").is(":checked")) {
+            remember = true;
+        }
+    });
 });
 
 function SuccessCBMovie(data) {
@@ -404,8 +399,29 @@ function SuccessCBMovie(data) {
         icon: "success",
         confirmButtonText: "OK"
     });
-    console.log("Movie added successfully:", data);
-
+    console.log("Movie added successfully");
+    document.getElementById("AllMovies").innerHTML += `<div class="col-md-6 col-lg-4 card" id="m${data.id}">
+    <div class="row">
+        <div class="col-4 col-md-6 cardPart">
+            <img class="image-container" src="${data.photoUrl}" onerror="handleImageError(this)">
+            <span class="rating"><i class="fas fa-star"></i> ${data.rating}</span>
+        </div>
+        <div class="col-8 col-md-6 cardPart">
+            <h3 class="MovieName">${data.title}</h3>
+            <p><i class="fa fa-clock-o"></i>${data.duration} minutes</p>
+            <p><i class="fa fa-dollar"></i>${data.income / 1000000}M$</p>
+            <span class="tag-cloud genre">${data.genre}</span>
+            <span class="tag-cloud language">${data.language}</span>
+        </div>
+        <div class="col-12 desc">
+            ${data.description}
+        </div>
+        <div class="col-12 wishD hidden">
+            <button class="btnATWish" onclick="AddToWishList(${data.id})">Add to Wish List</button>
+        </div>
+    </div>
+</div>`;
+$(`#m${data.id}`).hide();
     // אופציונלי: אפס את הטופס לאחר הצלחה
     document.getElementById("movieForm").reset();
 }
